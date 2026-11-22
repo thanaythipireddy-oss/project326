@@ -1,0 +1,148 @@
+/* General page colors and text */
+body {
+  margin: 0;
+  background: #f5f2ec;
+  color: #263442;
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+}
+
+/* Header and title */
+.topbar {
+  min-height: 54px;
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-bottom: 1px solid #dedbd3;
+}
+
+.site-title { color: #315879; font-size: 18px; font-weight: bold; text-decoration: none; }
+#signed-in-user { color: #5b6873; font-size: 14px; }
+.header-actions { position: relative; display: flex; align-items: center; gap: 12px; }
+.notification-panel { position: absolute; top: calc(100% + 9px); right: 0; z-index: 10; width: min(370px, calc(100vw - 28px)); max-height: 420px; overflow-y: auto; padding: 14px; border: 1px solid #cbd4dc; background: white; box-shadow: 0 5px 16px #26344225; }
+.notification-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.notification-heading h2 { margin: 0; font-size: 18px; }
+.small-button { padding: 5px 8px; border: 1px solid #9eacb6; background: white; color: #315879; cursor: pointer; font-size: 12px; }
+.notification-list { margin: 10px 0 0; padding: 0; list-style: none; }
+.notification-item { padding: 9px 7px; border-top: 1px solid #e1e3df; }
+.notification-item.unread { border-left: 3px solid #c08a4d; background: #f7f5ef; }
+.notification-item p { margin: 0 0 4px; font-size: 13px; }
+.notification-item small { color: #697783; font-size: 11px; }
+main { width: 92%; max-width: 1100px; min-height: 80vh; margin: 24px auto; }
+
+/* Welcome and login page layout */
+/* Login page workshop photo background; the white login card stays above it. */
+.welcome-layout {
+  min-height: 65vh;
+  display: grid;
+  grid-template-columns: 1fr 390px;
+  align-items: center;
+  gap: 30px;
+  background-image: linear-gradient(rgba(224, 238, 255, .22), rgba(224, 238, 255, .22)), url("workshop-background.jpg");
+  background-size: cover;
+  background-position: center;
+}
+.welcome-copy h1, .page-heading h1 { margin: 0; color: #315879; }
+.welcome-copy h1 { color: #173c63; font-size: 32px; }
+.welcome-copy p { max-width: 550px; color: #263e59; }
+.welcome-copy .meme-line { display: inline-block; margin-top: 8px; padding: 7px 10px; border-left: 3px solid #c08a4d; background: rgba(255, 255, 255, .72); color: #35546f; font-size: 14px; }
+.card { margin-bottom: 16px; padding: 20px; background: white; border: 1px solid #ddd9d0; }
+.login-card { margin: 0; }
+.tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+.tab { flex: 1; padding: 9px 6px; border: 1px solid #cbd4dc; background: #f5f7f8; color: #315879; cursor: pointer; }
+.tab.active { background: #315879; color: white; border-color: #315879; }
+h2 { margin: 0 0 8px; color: #315879; font-size: 21px; }
+h3 { color: #315879; }
+.card p { color: #5b6873; }
+.card h2 + p { margin-top: 0; }
+label { display: block; margin: 11px 0 4px; font-weight: bold; font-size: 14px; }
+input, select, textarea { width: 100%; min-height: 38px; padding: 8px; box-sizing: border-box; border: 1px solid #aeb9c2; background: white; font: inherit; }
+.button { padding: 9px 14px; border: 1px solid #3d716b; background: #3d716b; color: white; font: inherit; cursor: pointer; }
+.button:hover { background: #315b57; }
+.login-card .button, #customer-request-form .button { margin-top: 15px; }
+.button.secondary { background: white; color: #315879; border-color: #9eacb6; }
+.button.secondary:hover { background: #f2f0ea; }
+.demo-note { margin-top: 15px; padding: 10px; background: #f2f1e9; color: #45545f; font-size: 13px; border-left: 3px solid #c08a4d; }
+.message { min-height: 20px; color: #a13f31 !important; font-size: 13px; }
+.success-message { color: #32713c !important; font-size: 13px; }
+.hidden { display: none !important; }
+
+/* Dashboard headings, summary cards, and request tables */
+.page-heading { margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.page-heading p { margin: 4px 0 0; color: #5b6873; }
+.eyebrow { color: #697783 !important; font-size: 12px; font-weight: bold; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px; }
+.summary-card { margin: 0; }
+.summary-card h2 { font-size: 16px; }
+.number { margin: 2px 0 0; color: #a96f35 !important; font-size: 30px; font-weight: bold; }
+.technician-summary { margin-bottom: 16px; border-left: 4px solid #3d716b; }
+.section-heading { margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.section-heading p { margin: 4px 0 0; }
+.request-form { margin: 14px 0; padding: 14px; border: 1px solid #d5dce2; background: #f8f9fa; }
+.request-form h3 { margin: 0; font-size: 17px; }
+.form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.request-form .button { margin-top: 14px; }
+.filters { margin: 14px 0; display: flex; gap: 10px; }
+.filters input { max-width: 360px; }
+.filters select { width: 170px; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; background: white; }
+th, td { padding: 10px; border: 1px solid #d9d9d2; text-align: left; }
+th { background: #e8efeb; color: #294c4a; }
+td select { min-width: 125px; }
+.delete-button { padding: 6px 9px; border: 1px solid #b66d58; background: white; color: #98513e; cursor: pointer; }
+.edit-button { padding: 6px 9px; border: 1px solid #8ba2b5; background: white; color: #315879; cursor: pointer; }
+.customer-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 15px; }
+.request-list { padding-left: 20px; }
+.request-list li { margin: 10px 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.request-details { flex: 1; }
+.customer-edit-button { margin: 0 0 0 8px; }
+/* Completed-job QR display: keeps the supplied image compact and readable on phones. */
+.completed-qr { margin: 12px 0 4px; }
+.completed-qr img { display: block; width: min(190px, 52vw); height: auto; border: 1px solid #d9d9d2; background: #fff; }
+.completed-qr figcaption { margin-top: 5px; color: #53616c; font-size: 13px; }
+.empty-message { color: #697783; }
+.report-card { margin-top: 16px; }
+.meme-line { color: #68746d; font-size: 13px; font-style: italic; }
+footer { padding: 12px; background: #e9e3d9; color: #53616c; text-align: center; }
+.contact-line { display: inline-block; margin-top: 5px; font-size: 13px; }
+.contact-line a { color: #315879; }
+.admin-tools { margin-bottom: 18px; }
+.admin-tools h2 { margin-bottom: 5px; }
+.admin-tools + .admin-tools { border-top: 3px solid #3d716b; }
+.admin-tools .form-grid { margin: 12px 0 16px; align-items: end; }
+.admin-tools .button { margin-top: 11px; }
+#reception-tools h3 { margin: 20px 0 8px; font-size: 17px; }
+#reception-tools, #technician-tools { border-left: 4px solid #3d716b; }
+.request-approval, .request-bill, .part-choice, .part-quantity { display: block; margin-top: 6px; min-width: 145px; }
+.part-quantity { min-width: 70px; width: 70px; }
+.add-part-button { margin-top: 5px; }
+
+/* Adjust the layout for smaller screens */
+@media (max-width: 720px) {
+  main { width: 94%; margin: 16px auto; }
+  .topbar { padding: 8px 3%; gap: 8px; }
+  .site-title { max-width: 48vw; font-size: 15px; }
+  .header-actions { gap: 8px; }
+  #signed-in-user { max-width: 22vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .notification-panel { right: -2px; }
+  .welcome-layout, .customer-grid { grid-template-columns: 1fr; }
+  .welcome-layout { gap: 12px; }
+  .welcome-copy h1 { font-size: 27px; }
+  .summary-grid { gap: 8px; }
+  .card { padding: 14px; }
+}
+
+@media (max-width: 520px) {
+  .site-title { max-width: 42vw; font-size: 14px; }
+  #signed-in-user { display: none; }
+  #notification-button { padding: 7px 9px; font-size: 12px; }
+  .summary-grid, .form-grid { grid-template-columns: 1fr; }
+  .section-heading, .page-heading { align-items: flex-start; flex-direction: column; }
+  .filters { align-items: stretch; flex-direction: column; }
+  .filters select { width: 100%; }
+  th, td { padding: 7px; font-size: 13px; }
+  .request-approval, .request-bill, .part-choice { min-width: 130px; }
+}

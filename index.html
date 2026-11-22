@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workshop Management System</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="site-title" href="#" id="home-link">Workshop Management System</a>
+    <div class="header-actions">
+      <button id="notification-button" class="button secondary hidden" type="button" aria-expanded="false">Notifications <span id="notification-count">0</span></button>
+      <span id="signed-in-user"></span>
+      <!-- This panel lists saved notices for the signed-in role/account. -->
+      <section id="notification-panel" class="notification-panel hidden" aria-label="Notifications">
+        <div class="notification-heading"><h2>Notifications</h2><button id="mark-notifications-read" class="small-button" type="button">Mark all read</button></div>
+        <ul id="notification-list" class="notification-list"></ul>
+        <p id="empty-notifications" class="empty-message">No notifications yet.</p>
+      </section>
+    </div>
+  </header>
+
+  <main>
+    <!-- Welcome screen with login and customer registration -->
+    <section id="welcome-page" class="welcome-layout">
+      <div class="welcome-copy">
+        <h1>Welcome to the Workshop</h1>
+        <p>Book routine maintenance or request a repair. Add your vehicle details and describe the issue so our team can prepare. After signing in, you can follow your request through each service stage.</p>
+        <p class="meme-line">Nobody: … My car at 2 a.m.: “Let’s make a new noise.”</p>
+      </div>
+      <div class="card login-card">
+        <div class="tabs">
+          <button type="button" id="show-login" class="tab active">Login</button>
+          <button type="button" id="show-register" class="tab">Customer registration</button>
+        </div>
+        <form id="login-form">
+          <h2>Login</h2>
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" required>
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" required>
+          <p id="login-message" class="message"></p>
+          <button class="button" type="submit">Sign in</button>
+          <p class="demo-note"><strong>Admin:</strong> admin@workshop.com / admin123<br><strong>Technician:</strong> tech@workshop.com / tech123<br><strong>Receptionist:</strong> reception@workshop.com / front123</p>
+        </form>
+
+        <form id="register-form" class="hidden">
+          <h2>Customer registration</h2>
+          <label for="register-name">Name</label>
+          <input id="register-name" type="text" required>
+          <label for="register-email">Email</label>
+          <input id="register-email" type="email" required>
+          <label for="register-password">Password</label>
+          <input id="register-password" type="password" minlength="6" required>
+          <p id="register-message" class="message"></p>
+          <button class="button" type="submit">Create account</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Admin dashboard for viewing and managing service requests -->
+    <section id="admin-page" class="hidden">
+      <div class="page-heading">
+        <div><p id="staff-role-label" class="eyebrow">WORKSHOP STAFF</p><h1 id="staff-dashboard-title">Staff Dashboard</h1><p id="staff-dashboard-description">Review customer requests and update service status.</p></div>
+        <button id="admin-logout" class="button secondary" type="button">Log out</button>
+      </div>
+
+      <!-- Small report cards for request totals -->
+      <div id="staff-summary-grid" class="summary-grid">
+        <div class="card summary-card"><h2>New requests</h2><p id="new-count" class="number">0</p></div>
+        <div class="card summary-card"><h2>In progress</h2><p id="progress-count" class="number">0</p></div>
+        <div class="card summary-card"><h2>Completed</h2><p id="completed-count" class="number">0</p></div>
+      </div>
+      <div id="technician-summary" class="card technician-summary hidden"><strong>Active jobs in the workshop:</strong> <span id="active-job-count">0</span></div>
+
+      <!-- Admin-only chamber: staff accounts. -->
+      <section id="admin-tools" class="card admin-tools hidden">
+        <h2>Staff accounts</h2>
+        <p>Add staff logins and review or remove workshop accounts.</p>
+        <form id="staff-form" class="form-grid">
+          <div><label for="staff-name">Staff name</label><input id="staff-name" required></div>
+          <div><label for="staff-email">Email</label><input id="staff-email" type="email" required></div>
+          <div><label for="staff-role">Role</label><select id="staff-role"><option value="technician">Technician</option><option value="receptionist">Receptionist</option></select></div>
+          <div><label for="staff-password">Temporary password</label><input id="staff-password" required minlength="6"></div>
+          <div><button class="button" type="submit">Add staff account</button></div>
+        </form>
+        <div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Manage</th></tr></thead><tbody id="staff-list"></tbody></table></div>
+      </section>
+
+      <!-- Admin-only chamber: stock quantities and part prices. -->
+      <section class="card admin-tools hidden">
+        <h2>Parts inventory</h2>
+        <p>Select an existing part. Its current unit price fills automatically; enter stock being added.</p>
+        <form id="part-form" class="form-grid">
+          <div><label for="part-name">Part name</label><select id="part-name" required><option value="">Choose a part</option></select></div>
+          <div><label for="part-price">Unit price (₹)</label><input id="part-price" type="number" min="0" required></div>
+          <div><label for="part-stock">Quantity in stock</label><input id="part-stock" type="number" min="0" required></div>
+          <div><button class="button" type="submit">Add stock / save price</button></div>
+        </form>
+        <div class="table-wrap"><table><thead><tr><th>Part</th><th>Unit price</th><th>Stock</th><th>Stock value</th></tr></thead><tbody id="inventory-list"></tbody></table></div>
+      </section>
+
+      <!-- Admin-only chamber: service prices and summary report. -->
+      <section class="card admin-tools hidden">
+        <h2>Service prices and reports</h2>
+        <form id="price-form" class="form-grid">
+          <div><label for="price-service">Service</label><select id="price-service"><option>Oil service</option><option>Brake repair</option><option>Engine check</option><option>Annual inspection</option></select></div>
+          <div><label for="price-amount">Set base price (₹)</label><input id="price-amount" type="number" min="0" required></div>
+          <div><button class="button" type="submit">Save service price</button></div>
+        </form>
+        <p id="admin-overall-report"></p>
+        <div class="table-wrap"><table><thead><tr><th>Service</th><th>Base price</th></tr></thead><tbody id="service-price-list"></tbody></table></div>
+      </section>
+
+      <!-- Reception desk for booking approval and invoice totals. -->
+      <section id="reception-tools" class="card hidden">
+        <h2>Reception desk</h2>
+        <p>Review bookings, confirm customer approval, and record billing totals in the request list.</p>
+        <p id="reception-overall-report"></p>
+        <h3>Customer and vehicle records</h3>
+        <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Email</th><th>Vehicle</th><th>Appointment</th><th>Service</th></tr></thead><tbody id="reception-records"></tbody></table></div>
+      </section>
+
+      <!-- Technician workbench for job progression and part-use records. -->
+      <section id="technician-tools" class="card hidden">
+        <h2>Technician workbench</h2>
+        <p>Update job progress in the work list. Add parts used to reduce stock and record the part cost.</p>
+        <p id="technician-work-count"></p>
+      </section>
+
+      <!-- Admin request tools, filters, and request table -->
+      <section class="card">
+        <div class="section-heading"><div><h2 id="request-list-title">Customer service requests</h2><p id="request-list-description">Requests submitted by customers are listed here.</p></div><button id="show-new-request" class="button" type="button">＋ Add request</button></div>
+        <!-- Admin form used to add or edit a service request -->
+        <form id="admin-request-form" class="request-form hidden">
+          <h3 id="admin-form-title">Add a customer request</h3>
+          <div class="form-grid">
+            <div><label for="admin-customer">Customer name</label><input id="admin-customer" type="text" required></div>
+            <div><label for="admin-email">Customer email (if registered)</label><input id="admin-email" type="email"></div>
+            <div><label for="admin-phone">Customer phone</label><input id="admin-phone" type="tel"></div>
+            <div><label for="admin-date">Appointment date</label><input id="admin-date" type="date" required></div>
+            <div><label for="admin-vehicle">Vehicle</label><input id="admin-vehicle" type="text" required></div>
+            <div><label for="admin-service">Service</label><select id="admin-service" required><option value="">Choose a service</option><option>Oil service</option><option>Brake repair</option><option>Engine check</option><option>Annual inspection</option><option>Other</option></select></div>
+            <div><label for="admin-technician">Assign technician</label><select id="admin-technician"><option value="">Not assigned</option></select></div>
+            <div><label for="admin-complaint">Initial complaint</label><input id="admin-complaint" type="text" required></div>
+          </div>
+          <button id="save-request-button" class="button" type="submit">Save request</button>
+          <button id="cancel-new-request" class="button secondary" type="button">Cancel</button>
+        </form>
+        <p id="admin-message" class="success-message" aria-live="polite"></p>
+        <div class="filters">
+          <input id="request-search" type="search" placeholder="Search customer, vehicle or service">
+          <select id="status-filter">
+            <option value="All">All statuses</option>
+            <option>New</option><option>In Progress</option><option>Ready</option><option>Completed</option>
+          </select>
+        </div>
+        <!-- Admin request table with status, edit, and delete actions -->
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Customer</th><th>Appointment</th><th>Vehicle</th><th>Initial complaint</th><th>Service</th><th>Status</th><th>Update</th></tr></thead>
+            <tbody id="admin-requests"></tbody>
+          </table>
+        </div>
+        <p id="empty-admin-list" class="empty-message hidden">No requests match this search.</p>
+      </section>
+
+      <!-- Short summary report -->
+      <section id="staff-report" class="card report-card">
+        <h2>Basic report</h2>
+        <p id="report-summary"></p>
+        <p class="meme-line">“This is fine.” — every driver pretending the warning light will go away</p>
+      </section>
+    </section>
+
+    <!-- Customer dashboard for creating and tracking service requests -->
+    <section id="customer-page" class="hidden">
+      <div class="page-heading">
+        <div><p class="eyebrow">CUSTOMER AREA</p><h1 id="customer-greeting">My Dashboard</h1><p>Request a service and check your request status.</p><p class="meme-line">One does not simply ignore the check-engine light.</p></div>
+        <button id="customer-logout" class="button secondary" type="button">Log out</button>
+      </div>
+      <div class="customer-grid">
+        <section class="card">
+          <h2>Request a service</h2>
+          <p>Enter your vehicle and the service you need.</p>
+          <!-- Customer booking form with vehicle, date, service, and complaint -->
+          <form id="customer-request-form">
+            <label for="vehicle-year">Vehicle year</label>
+            <select id="vehicle-year" required>
+              <option value="">Choose a year</option>
+            </select>
+            <div id="other-year-field" class="hidden">
+              <label for="other-year">Enter vehicle year</label>
+              <input id="other-year" type="number" min="1900" max="2099" placeholder="Example: 1988">
+            </div>
+            <label for="vehicle-company">Vehicle company</label>
+            <select id="vehicle-company" required>
+              <option value="">Choose a company</option>
+              <option>Honda</option><option>Toyota</option><option>BMW</option><option>Audi</option>
+              <option>Ford</option><option>Hyundai</option><option>Nissan</option><option>Suzuki</option>
+              <option>Kia</option><option>Tesla</option>
+              <option value="Other">Other (not listed)</option>
+            </select>
+            <div id="other-company-field" class="hidden">
+              <label for="other-company">Enter vehicle company</label>
+              <input id="other-company" type="text" placeholder="Example: Mazda">
+            </div>
+            <label for="vehicle-model">Vehicle model</label>
+            <select id="vehicle-model" required disabled>
+              <option value="">Choose a company first</option>
+            </select>
+            <div id="other-model-field" class="hidden">
+              <label for="other-model">Enter vehicle model</label>
+              <input id="other-model" type="text" placeholder="Enter your vehicle model">
+            </div>
+            <label for="appointment-date">Appointment date</label>
+            <input id="appointment-date" type="date" required>
+            <label for="customer-service">Service needed</label>
+            <select id="customer-service" required>
+              <option value="">Choose a service</option>
+              <option>Oil service</option><option>Brake repair</option><option>Engine check</option><option>Annual inspection</option><option>Other</option>
+            </select>
+            <div id="other-service-field" class="hidden">
+              <label for="other-service">Please describe the service you need</label>
+              <textarea id="other-service" rows="3" placeholder="Type the service you need"></textarea>
+            </div>
+            <label for="initial-complaint">Initial complaint</label>
+            <textarea id="initial-complaint" rows="3" placeholder="Briefly describe the issue" required></textarea>
+            <button id="customer-submit-button" class="button" type="submit">Submit request</button>
+            <button id="cancel-customer-edit" class="button secondary hidden" type="button">Cancel edit</button>
+            <p id="customer-request-message" class="success-message"></p>
+          </form>
+        </section>
+        <section class="card">
+          <h2>My requests</h2>
+          <ul id="my-requests" class="request-list"></ul>
+          <p id="empty-customer-list" class="empty-message">You have not submitted a request yet.</p>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer label -->
+  <footer>Workshop Management System · VAT<br><span class="contact-line">For queries and assistance: <a href="mailto:veeruveren71@gmail.com">veeruveren71@gmail.com</a> · <a href="tel:8121602231">8121602231</a> · LPU, Phagwara, Punjab</span></footer>
+</body>
+</html>
